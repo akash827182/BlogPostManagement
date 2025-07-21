@@ -1,4 +1,4 @@
-﻿namespace BlogPostManagement.Models
+﻿namespace BlogPostManagement.Dto
 {
     public class UserDto
     {

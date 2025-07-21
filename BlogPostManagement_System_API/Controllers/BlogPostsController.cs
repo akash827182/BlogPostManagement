@@ -1,4 +1,4 @@
-﻿using BlogPostManagement.Models;
+﻿using BlogPostManagement.Dto;
 using BlogPostManagement.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

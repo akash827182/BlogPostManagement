@@ -1,4 +1,5 @@
-﻿using BlogPostManagement.Entities;
+﻿
+using BlogPostManagement.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogPostManagement.Data

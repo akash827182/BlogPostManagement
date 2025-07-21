@@ -1,4 +1,5 @@
-﻿using BlogPostManagement.Entities;
+﻿
+using BlogPostManagement.Dto;
 using BlogPostManagement.Models;
 using BlogPostManagement.Repositories;
 
@@ -22,7 +23,8 @@ namespace BlogPostManagement.Services
                 Author = blogPost.Author,
                 Content = blogPost.Content,
                 CreatedAt = blogPost.CreatedAt,
-                UpdatedAt = blogPost.UpdatedAt
+                UpdatedAt = blogPost.UpdatedAt,
+                IsPublished= blogPost.IsPublished
             };
 
         }

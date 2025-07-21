@@ -1,4 +1,4 @@
-﻿using BlogPostManagement.Entities;
+﻿using BlogPostManagement.Models;
 
 namespace BlogPostManagement.Repositories
 {

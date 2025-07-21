@@ -1,5 +1,4 @@
 ﻿using BlogPostManagement.Data;
-using BlogPostManagement.Entities;
 using BlogPostManagement.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +13,7 @@ namespace BlogPostManagement.Repositories
             _context = context;
         }
 
-        public async Task<User> GetByUsernameAsync(string username)
+        public async Task<User?> GetByUsernameAsync(string username)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             

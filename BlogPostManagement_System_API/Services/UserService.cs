@@ -1,4 +1,5 @@
-﻿using BlogPostManagement.Entities;
+﻿
+using BlogPostManagement.Dto;
 using BlogPostManagement.Models;
 using BlogPostManagement.Repositories;
 
@@ -11,17 +12,6 @@ namespace BlogPostManagement.Services
         public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-        }
-
-        public async Task<User> GetUserByUsernameAsync(string username)
-        {
-            if (string.IsNullOrEmpty(username))
-            {
-                throw new ArgumentException("Username cannot be null or empty");
-            }
-
-            var user = await _userRepository.GetByUsernameAsync(username);
-            return user;
         }
 
         public async Task RegisterUserAsync(UserDto userDto)
@@ -44,6 +34,19 @@ namespace BlogPostManagement.Services
             };
             await _userRepository.AddAsync(user);
         }
+
+        public async Task<User> GetUserByUsernameAsync(string username)
+        {
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException("Username cannot be null or empty");
+            }
+
+            var user = await _userRepository.GetByUsernameAsync(username);
+            return user;
+        }
+
+        
 
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {

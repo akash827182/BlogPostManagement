@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogPostManagement.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20250716165824_updated Migration")]
-    partial class updatedMigration
+    [Migration("20250720071851_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace BlogPostManagement.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BlogPostManagement.Entities.BlogPost", b =>
+            modelBuilder.Entity("BlogPostManagement.Models.BlogPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace BlogPostManagement.Migrations
                     b.ToTable("BlogPosts");
                 });
 
-            modelBuilder.Entity("BlogPostManagement.Entities.User", b =>
+            modelBuilder.Entity("BlogPostManagement.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
