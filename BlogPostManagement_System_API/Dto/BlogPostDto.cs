@@ -1,19 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace BlogPostManagement.Entities
+﻿namespace BlogPostManagement.Dto
 {
-    public class BlogPost
+    public class BlogPostDto
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public required string Title { get; set; }
         public required string Author { get; set; }
         public required string Content { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-        public bool IsPublished { get; set; } = false;
+        public bool IsPublished { get; set; }
 
 
     }

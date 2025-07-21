@@ -17,7 +17,6 @@ internal class Program
         // Add services to the container.
 
         builder.Services.AddControllers();
-
         builder.Services.AddDbContext<BlogDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("BlogPostManagementDb")));
         builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
@@ -26,13 +25,7 @@ internal class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
 
-
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-
-        // Ensure Jwt:Key is not null or empty
+    
 
         var jwtKey = builder.Configuration["Jwt:Key"];
         if (string.IsNullOrEmpty(jwtKey))
@@ -55,7 +48,6 @@ internal class Program
                 };
             });
 
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
@@ -80,14 +72,14 @@ internal class Program
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            Array.Empty<string>()
         }
             });
         });
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+        // HTTP request pipeline COnfiguration.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -95,6 +87,8 @@ internal class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseMiddleware<BlogPostManagement.Middleware.ExceptionHandlingMiddleware>();
+
         app.UseAuthentication();
         app.UseAuthorization();
 

@@ -1,4 +1,5 @@
-﻿namespace BlogPostManagement.Entities
+﻿namespace BlogPostManagement.Models
+
 {
     public class User
     {

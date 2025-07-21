@@ -1,4 +1,5 @@
-﻿using BlogPostManagement.Models;
+﻿using BlogPostManagement.Dto;
+
 
 namespace BlogPostManagement.Services
 {

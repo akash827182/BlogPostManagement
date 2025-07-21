@@ -52,6 +52,8 @@ appsettings.*.json
 
 # Entity Framework Core Migrations snapshots 
 Migrations/*Snapshot.cs
+20250720071851_InitialCreate.cs
+BlogDbContextModelSnapshot.cs
 
 # Rider/JetBrains files 
 .idea/
