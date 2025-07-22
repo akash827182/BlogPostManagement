@@ -39,7 +39,8 @@ namespace BlogPostManagement.Services
                 Author = bp.Author,
                 Content = bp.Content,
                 CreatedAt = bp.CreatedAt,
-                UpdatedAt = bp.UpdatedAt
+                UpdatedAt = bp.UpdatedAt,
+                IsPublished = bp.IsPublished
             });
         }
 
@@ -57,7 +58,8 @@ namespace BlogPostManagement.Services
                 Author = blogPostDto.Author,
                 Content = blogPostDto.Content,
                 CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow,
+                IsPublished = blogPostDto.IsPublished
             };
             await _blogPostRepository.AddAsync(blogPost);
             blogPostDto.Id = blogPost.Id; // Id alloted after adding to the repository
@@ -71,10 +73,13 @@ namespace BlogPostManagement.Services
             {
                 throw new KeyNotFoundException("Blog post not found.");
             }
+            
             previousBlogPost.Title = blogPostDto.Title;
             previousBlogPost.Author = blogPostDto.Author;
             previousBlogPost.Content = blogPostDto.Content;
             previousBlogPost.UpdatedAt = DateTime.UtcNow;
+            previousBlogPost.CreatedAt = DateTime.UtcNow;
+            
             await _blogPostRepository.UpdateAsync(previousBlogPost);
         }
 

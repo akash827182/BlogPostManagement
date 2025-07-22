@@ -1,10 +1,12 @@
-﻿using BlogPostManagement.Dto;
+﻿using BlogPostManagement.Conventions;
+using BlogPostManagement.Dto;
 using BlogPostManagement.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogPostManagement.Controllers
 {
+    [ApiConventionType(typeof(CustomApiConventions))]
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
@@ -19,8 +21,8 @@ namespace BlogPostManagement.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BlogPostDto>> GetBlogPost(int id)
         {
             var blogPost = await _blogPostService.GetBlogPostByIdAsync(id);
@@ -33,8 +35,8 @@ namespace BlogPostManagement.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllBlogPosts()
         {
             var blogPosts = await _blogPostService.GetAllBlogPostsAsync();
@@ -59,26 +61,28 @@ namespace BlogPostManagement.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateBlogPost(int id, [FromBody] BlogPostDto blogPostDto)
         {
-            if (blogPostDto == null || id != blogPostDto.Id)
+            if (blogPostDto == null)
             {
                 return BadRequest("Invalid blog post data.");
             }
+            
             await _blogPostService.UpdateBlogPostAsync(id, blogPostDto);
             return Ok("Update Successful");
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteBlogPost(int id)
         {
             await _blogPostService.DeleteBlogPostAsync(id);
             return NoContent();
         }
-
-       
     }
 }

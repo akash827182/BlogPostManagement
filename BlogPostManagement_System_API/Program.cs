@@ -75,6 +75,10 @@ internal class Program
             Array.Empty<string>()
         }
             });
+
+            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+            
         });
 
         var app = builder.Build();

@@ -21,7 +21,9 @@ namespace BlogPostManagement.Services
             var claims = new[]
             {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
-                    new Claim(ClaimTypes.Name, user.Username)
+                    new Claim(ClaimTypes.Name, user.Username),
+                    //new Claim(ClaimTypes.Role, user.Role),
+
                 };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -31,7 +33,7 @@ namespace BlogPostManagement.Services
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(300),
+                expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
