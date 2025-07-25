@@ -1,13 +1,15 @@
 ﻿
+using AutoMapper;
 using BlogPostManagement.Dto;
 using BlogPostManagement.Models;
 using BlogPostManagement.Repositories;
 
 namespace BlogPostManagement.Services
 {
-    public class BlogPostService(IBlogPostRepository blogPostRepository) : IBlogPostService
+    public class BlogPostService(IBlogPostRepository blogPostRepository,IMapper mapper) : IBlogPostService
     {
         private readonly IBlogPostRepository _blogPostRepository = blogPostRepository;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<BlogPostDto> GetBlogPostByIdAsync(int id)
         {
@@ -16,54 +18,38 @@ namespace BlogPostManagement.Services
             {
                 throw new KeyNotFoundException("Blog post not found.");
             }
-            return new BlogPostDto
-            {
-                Id = blogPost.Id,
-                Title = blogPost.Title,
-                Author = blogPost.Author,
-                Content = blogPost.Content,
-                CreatedAt = blogPost.CreatedAt,
-                UpdatedAt = blogPost.UpdatedAt,
-                IsPublished= blogPost.IsPublished
-            };
+            //return new BlogPostDto
+            //{
+            //    Id = blogPost.Id,
+            //    Title = blogPost.Title,
+            //    Author = blogPost.Author,
+            //    Content = blogPost.Content,
+            //    CreatedAt = blogPost.CreatedAt,
+            //    UpdatedAt = blogPost.UpdatedAt,
+            //    IsPublished= blogPost.IsPublished
+            //};
+            return _mapper.Map<BlogPostDto>(blogPost);
 
         }
 
         public async Task<IEnumerable<BlogPostDto>> GetAllBlogPostsAsync()
         {
             var blogPosts = await _blogPostRepository.GetAllBlogPostsAsync();
-            return blogPosts.Select(bp => new BlogPostDto   // instead we can use a separate private method to map entities to DTOs
-            {
-                Id = bp.Id,
-                Title = bp.Title,
-                Author = bp.Author,
-                Content = bp.Content,
-                CreatedAt = bp.CreatedAt,
-                UpdatedAt = bp.UpdatedAt,
-                IsPublished = bp.IsPublished
-            });
+            return _mapper.Map<IEnumerable<BlogPostDto>>(blogPosts);
         }
 
         public async Task<BlogPostDto> CreateBlogPostAsync(BlogPostDto blogPostDto)
         {
-
             if (string.IsNullOrEmpty(blogPostDto.Title) || string.IsNullOrEmpty(blogPostDto.Content))
             {
                 throw new ArgumentException("Title and content are required");
             }
 
-            var blogPost = new BlogPost
-            {
-                Title = blogPostDto.Title,
-                Author = blogPostDto.Author,
-                Content = blogPostDto.Content,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                IsPublished = blogPostDto.IsPublished
-            };
+            var blogPost = _mapper.Map<BlogPost>(blogPostDto);
+            blogPost.CreatedAt = DateTime.UtcNow;
+            blogPost.UpdatedAt = DateTime.UtcNow;
             await _blogPostRepository.AddAsync(blogPost);
-            blogPostDto.Id = blogPost.Id; // Id alloted after adding to the repository
-            return blogPostDto;
+            return _mapper.Map<BlogPostDto>(blogPost);
         }
 
         public async Task UpdateBlogPostAsync(int id, BlogPostDto blogPostDto)
@@ -73,13 +59,10 @@ namespace BlogPostManagement.Services
             {
                 throw new KeyNotFoundException("Blog post not found.");
             }
-            
-            previousBlogPost.Title = blogPostDto.Title;
-            previousBlogPost.Author = blogPostDto.Author;
-            previousBlogPost.Content = blogPostDto.Content;
+
+            _mapper.Map(blogPostDto, previousBlogPost);
             previousBlogPost.UpdatedAt = DateTime.UtcNow;
-            previousBlogPost.CreatedAt = DateTime.UtcNow;
-            
+
             await _blogPostRepository.UpdateAsync(previousBlogPost);
         }
 

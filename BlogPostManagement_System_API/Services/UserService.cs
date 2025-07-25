@@ -2,6 +2,7 @@
 using BlogPostManagement.Dto;
 using BlogPostManagement.Models;
 using BlogPostManagement.Repositories;
+using static BlogPostManagement.Middleware.ExceptionHandlingMiddleware;
 
 namespace BlogPostManagement.Services
 {
@@ -18,13 +19,13 @@ namespace BlogPostManagement.Services
         {
             if (userDto == null || string.IsNullOrEmpty(userDto.Username) || string.IsNullOrEmpty(userDto.Password))
             {
-                throw new ArgumentException("Username and password are required");
+                throw new ArgumentException("Username and password are required"); //validation required
             }
 
             var existingUser = await _userRepository.GetByUsernameAsync(userDto.Username);
             if (existingUser != null)
             {
-                throw new Exception("Username already exists");
+                throw new UsernameAlreadyExistsException();
             }
 
             var user = new User
@@ -54,7 +55,7 @@ namespace BlogPostManagement.Services
             return users.Select(static u => new UserDto
             {
                 Username = u.Username,
-                Password = "hidden"
+                Password = null
 
             });
         }

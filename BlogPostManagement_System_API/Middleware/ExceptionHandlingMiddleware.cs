@@ -48,16 +48,22 @@ namespace BlogPostManagement.Middleware
             var jsonResponse = JsonSerializer.Serialize(response);
             return context.Response.WriteAsync(jsonResponse);
         }
+        public class UsernameAlreadyExistsException : Exception
+        {
+            public UsernameAlreadyExistsException() : base("Username already exists.") { }
+        }
 
         private (int statusCode, string message) GetResponseDetails(Exception exception)
         {
             return exception switch
             {
+                UsernameAlreadyExistsException _ => ((int)HttpStatusCode.Conflict, exception.Message), // 409 Conflict
                 KeyNotFoundException _ => ((int)HttpStatusCode.NotFound, "Resource not found."),
-                ArgumentException _ or ValidationException _ => ((int)HttpStatusCode.BadRequest, exception.Message), 
+                ArgumentException _ or ValidationException _ => ((int)HttpStatusCode.BadRequest, exception.Message),
                 UnauthorizedAccessException _ => ((int)HttpStatusCode.Forbidden, "Access denied."),
                 _ => ((int)HttpStatusCode.InternalServerError, "An unexpected error occurred.")
             };
         }
+        
     }
 }

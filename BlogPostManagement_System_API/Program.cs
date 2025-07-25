@@ -1,9 +1,9 @@
 using BlogPostManagement.Data;
+using BlogPostManagement.MappingProfile;
 using BlogPostManagement.Repositories;
 using BlogPostManagement.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -19,6 +19,7 @@ internal class Program
         builder.Services.AddControllers();
         builder.Services.AddDbContext<BlogDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("BlogPostManagementDb")));
+        builder.Services.AddAutoMapper(typeof(BlogPostProfile));
         builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
         builder.Services.AddScoped<IBlogPostService, BlogPostService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -75,9 +76,6 @@ internal class Program
             Array.Empty<string>()
         }
             });
-
-            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
             
         });
 
@@ -92,10 +90,8 @@ internal class Program
 
         app.UseHttpsRedirection();
         app.UseMiddleware<BlogPostManagement.Middleware.ExceptionHandlingMiddleware>();
-
         app.UseAuthentication();
         app.UseAuthorization();
-
         app.MapControllers();
 
         app.Run();

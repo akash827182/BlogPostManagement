@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlogPostManagement.Controllers
 {
-    [ApiConventionType(typeof(CustomApiConventions))]
+    //[ApiConventionType(typeof(CustomApiConventions))]
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
     public class BlogPostsController : ControllerBase
     {
         private readonly IBlogPostService _blogPostService;
+
 
         public BlogPostsController(IBlogPostService blogPostService)
         {
@@ -49,9 +50,9 @@ namespace BlogPostManagement.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateBlogPost([FromBody] BlogPostDto blogPostDto)
         {
-            if (blogPostDto == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Blog post data is required.");
+                return BadRequest(ModelState);
             }
             var createdBlogPost = await _blogPostService.CreateBlogPostAsync(blogPostDto);
             return CreatedAtAction(nameof(GetBlogPost), new { id = createdBlogPost.Id }, createdBlogPost);
